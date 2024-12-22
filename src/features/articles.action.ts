@@ -69,10 +69,12 @@ export const getAllArticles = action.schema(z.object({})).action(async () => {
     }
 
     return articles.docs;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Erreur lors de la récupération des articles:", error);
     throw new Error(
-      `Erreur lors de la récupération des articles: ${error.message}`
+      `Erreur lors de la récupération des articles: ${
+        error instanceof Error ? error.message : "Erreur inconnue"
+      }`
     );
   }
 });

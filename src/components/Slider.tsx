@@ -9,27 +9,6 @@ interface SliderProps {
   articles: Article[] | undefined;
 }
 
-interface RichTextContent {
-  root: {
-    children: Array<{
-      children: Array<{
-        text: string;
-      }>;
-    }>;
-  };
-}
-
-function isRichTextContent(content: unknown): content is RichTextContent {
-  const contentObj = content as { root?: { children?: unknown[] } };
-  return (
-    typeof content === "object" &&
-    content !== null &&
-    "root" in content &&
-    contentObj.root !== undefined &&
-    "children" in contentObj.root
-  );
-}
-
 export const Slider = ({ articles }: SliderProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -73,13 +52,9 @@ export const Slider = ({ articles }: SliderProps) => {
 
       {/* Contenu du slider */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
-        <h1 className="font-playfair text-5xl md:text-7xl font-bold text-white mb-6">
+        <h1 className="font-playfair text-5xl md:text-6xl font-bold text-white mb-6">
           {articles[currentSlide].title}
         </h1>
-        {/* <p className="text-xl md:text-2xl text-white max-w-2xl font-lora mb-8">
-          {isRichTextContent(articles[currentSlide].content) &&
-            articles[currentSlide].content.root.children[0]?.children[0]?.text}
-        </p> */}
         <Link
           href={`/article/${articles[currentSlide].id}`}
           className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm transition font-montserrat"
