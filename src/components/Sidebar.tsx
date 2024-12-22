@@ -7,7 +7,7 @@ export function Sidebar() {
     <aside className="w-full lg:w-1/3 px-4">
       <div className="sticky top-8">
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6">
-          <h2 className="font-rubik text-2xl font-light mb-6 text-green-800 dark:text-green-100">
+          <h2 className="font-rubik text-2xl font-light mb-6 text-black">
             À propos de moi
           </h2>
 

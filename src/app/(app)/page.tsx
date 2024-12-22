@@ -13,7 +13,7 @@ export default async function Home() {
       <Slider articles={articles} />
 
       <main>
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-5xl mx-auto px-4">
           <ArticlesSection articles={articles} />
 
           {/* Footer */}
