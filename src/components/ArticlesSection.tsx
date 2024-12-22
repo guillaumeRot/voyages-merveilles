@@ -9,16 +9,27 @@ interface ArticlesSectionProps {
   articles: Article[];
 }
 
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
 export function ArticlesSection({ articles }: ArticlesSectionProps) {
   return (
     <main className="py-20">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Section Articles (2/3 de la largeur) */}
+      <div className="max-w-[1600px] mx-auto px-8">
+        <div className="flex flex-col lg:flex-row gap-12">
           <div className="w-full lg:w-2/3">
-            <h2 className="font-rubik text-3xl font-light text-center mb-12 text-black">
-              Articles récents
-            </h2>
+            <div className="flex items-center justify-center mb-12">
+              <div className="flex-grow h-[1px] bg-black max-w-[100px]"></div>
+              <h2 className="font-rubik text-3xl font-light text-black px-8">
+                Articles récents
+              </h2>
+              <div className="flex-grow h-[1px] bg-black max-w-[100px]"></div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {articles.map((article) => (
                 <article key={article.id} className="group">
@@ -37,7 +48,7 @@ export function ArticlesSection({ articles }: ArticlesSectionProps) {
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
                         <span className="text-white text-sm">
-                          {article.createdAt}
+                          {formatDate(article.createdAt)}
                         </span>
                       </div>
                     </div>
@@ -54,12 +65,11 @@ export function ArticlesSection({ articles }: ArticlesSectionProps) {
                 href="/destinations"
                 className="inline-block px-6 py-3 border-2 border-black text-black hover:bg-black hover:text-white transition rounded-lg"
               >
-                Voir toutes les destinations ➜
+                Voir tous les articles ➜
               </Link>
             </div>
           </div>
 
-          {/* Sidebar (1/3 de la largeur) */}
           <Sidebar />
         </div>
       </div>
