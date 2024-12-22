@@ -13,6 +13,11 @@ const Articles: CollectionConfig = {
       label: "Titre",
     },
     {
+      name: "destination",
+      type: "text",
+      required: true,
+    },
+    {
       name: "mainImage",
       type: "upload",
       relationTo: "media",
