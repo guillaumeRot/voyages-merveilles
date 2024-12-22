@@ -15,14 +15,36 @@ export default async function Home() {
       <main>
         <div className="max-w-5xl mx-auto px-4">
           <ArticlesSection articles={articles} />
-
-          {/* Footer */}
-          <footer className="bg-green-50 dark:bg-slate-900 py-8 border-t border-green-100 dark:border-green-800">
-            <div className="max-w-4xl mx-auto px-4 text-center text-green-600 dark:text-green-400">
-              <p>© 2024 Voyages Nature. Tous droits réservés.</p>
-            </div>
-          </footer>
         </div>
+        <footer className="bg-zinc-900 py-12">
+          <div className="max-w-[1600px] mx-auto px-8">
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-zinc-400 text-sm mb-4">
+                © 2024 Voyages Nature. Tous droits réservés.
+              </p>
+              <div className="flex gap-6">
+                <a
+                  href="#"
+                  className="text-zinc-400 hover:text-white transition"
+                >
+                  Instagram
+                </a>
+                <a
+                  href="#"
+                  className="text-zinc-400 hover:text-white transition"
+                >
+                  Facebook
+                </a>
+                <a
+                  href="#"
+                  className="text-zinc-400 hover:text-white transition"
+                >
+                  Twitter
+                </a>
+              </div>
+            </div>
+          </div>
+        </footer>
       </main>
     </div>
   );
