@@ -57,7 +57,7 @@ export const Slider = ({ articles }: SliderProps) => {
         </h1>
         <Link
           href={`/article/${articles[currentSlide].id}`}
-          className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm transition font-montserrat"
+          className="px-6 py-3 mt-5 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm transition font-montserrat"
         >
           Lire l&apos;article
         </Link>
