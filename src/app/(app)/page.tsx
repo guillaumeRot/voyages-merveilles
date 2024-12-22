@@ -1,14 +1,17 @@
-"use client";
-
 import { Slider } from "@/components/Slider";
+import { getAllArticles } from "@/features/articles.action";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const result = await getAllArticles({});
+  const articles = result?.data;
+
+  if (!articles) return null;
+
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
-      {/* Hero Section avec slider */}
-      <Slider />
+      <Slider articles={articles} />
 
       {/* Contenu principal */}
       <main>

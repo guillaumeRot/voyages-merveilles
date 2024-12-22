@@ -5,197 +5,50 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Header } from "./Header";
 
-interface RichTextNode {
-  text: string;
-  type: string;
-  version: number;
-}
-
-interface RichTextParagraph {
-  type: string;
-  version: number;
-  children: RichTextNode[];
-  direction: "ltr";
-  format: string;
-  indent: number;
+interface SliderProps {
+  articles: Article[] | undefined;
 }
 
 interface RichTextContent {
   root: {
-    type: string;
-    version: number;
-    children: RichTextParagraph[];
-    direction: "ltr";
-    format: string;
-    indent: number;
+    children: Array<{
+      children: Array<{
+        text: string;
+      }>;
+    }>;
   };
 }
 
-const SLIDER_ARTICLES: Article[] = [
-  {
-    id: 1,
-    title: "Les trésors naturels du Costa Rica",
-    content: {
-      root: {
-        type: "root",
-        version: 1,
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        children: [
-          {
-            type: "paragraph",
-            version: 1,
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            children: [
-              {
-                text: "Découvrez la biodiversité exceptionnelle de l'Amérique Centrale",
-                type: "text",
-                version: 1,
-              },
-            ],
-          },
-        ],
-      },
-    },
-    mainImage: {
-      id: 1,
-      url: "/images/paris.jpg",
-      alt: "Costa Rica",
-      filename: "paris.jpg",
-      mimeType: "image/jpeg",
-      filesize: 1000,
-      width: 1920,
-      height: 1080,
-      createdAt: "2024-04-15T00:00:00.000Z",
-      updatedAt: "2024-04-15T00:00:00.000Z",
-    },
-    author: {
-      id: 1,
-      email: "admin@example.com",
-      createdAt: "2024-04-15T00:00:00.000Z",
-      updatedAt: "2024-04-15T00:00:00.000Z",
-    },
-    createdAt: "2024-04-15T00:00:00.000Z",
-    updatedAt: "2024-04-15T00:00:00.000Z",
-  },
-  {
-    id: 2,
-    title: "Randonnée dans les Fjords",
-    content: {
-      root: {
-        type: "root",
-        version: 1,
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        children: [
-          {
-            type: "paragraph",
-            version: 1,
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            children: [
-              {
-                text: "Une aventure inoubliable au cœur de la Norvège sauvage",
-                type: "text",
-                version: 1,
-              },
-            ],
-          },
-        ],
-      },
-    },
-    mainImage: {
-      id: 2,
-      url: "/images/paris.jpg",
-      alt: "Norvège",
-      filename: "paris.jpg",
-      mimeType: "image/jpeg",
-      filesize: 1000,
-      width: 1920,
-      height: 1080,
-      createdAt: "2024-04-10T00:00:00.000Z",
-      updatedAt: "2024-04-10T00:00:00.000Z",
-    },
-    author: {
-      id: 2,
-      email: "admin@example.com",
-      createdAt: "2024-04-10T00:00:00.000Z",
-      updatedAt: "2024-04-10T00:00:00.000Z",
-    },
-    createdAt: "2024-04-10T00:00:00.000Z",
-    updatedAt: "2024-04-10T00:00:00.000Z",
-  },
-  {
-    id: 3,
-    title: "Les Merveilles du Tongariro",
-    content: {
-      root: {
-        type: "root",
-        version: 1,
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        children: [
-          {
-            type: "paragraph",
-            version: 1,
-            direction: "ltr",
-            format: "",
-            indent: 0,
-            children: [
-              {
-                text: "Exploration des paysages volcaniques de Nouvelle-Zélande",
-                type: "text",
-                version: 1,
-              },
-            ],
-          },
-        ],
-      },
-    },
-    mainImage: {
-      id: 3,
-      url: "/images/paris.jpg",
-      alt: "Nouvelle-Zélande",
-      filename: "paris.jpg",
-      mimeType: "image/jpeg",
-      filesize: 1000,
-      width: 1920,
-      height: 1080,
-      createdAt: "2024-04-05T00:00:00.000Z",
-      updatedAt: "2024-04-05T00:00:00.000Z",
-    },
-    author: {
-      id: 3,
-      email: "admin@example.com",
-      createdAt: "2024-04-05T00:00:00.000Z",
-      updatedAt: "2024-04-05T00:00:00.000Z",
-    },
-    createdAt: "2024-04-05T00:00:00.000Z",
-    updatedAt: "2024-04-05T00:00:00.000Z",
-  },
-];
+function isRichTextContent(content: unknown): content is RichTextContent {
+  const contentObj = content as { root?: { children?: unknown[] } };
+  return (
+    typeof content === "object" &&
+    content !== null &&
+    "root" in content &&
+    contentObj.root !== undefined &&
+    "children" in contentObj.root
+  );
+}
 
-export const Slider = () => {
+export const Slider = ({ articles }: SliderProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
+    if (!articles?.length) return;
+
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % SLIDER_ARTICLES.length);
+      setCurrentSlide((prev) => (prev + 1) % articles.length);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [articles?.length]);
+
+  if (!articles?.length) return null;
 
   return (
     <div className="relative h-screen w-full">
       {/* Images de fond avec transition */}
-      {SLIDER_ARTICLES.map((article, index) => (
+      {articles.map((article, index) => (
         <div
           key={article.id}
           className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -221,22 +74,14 @@ export const Slider = () => {
       {/* Contenu du slider */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
         <h1 className="font-playfair text-5xl md:text-7xl font-bold text-white mb-6">
-          {SLIDER_ARTICLES[currentSlide].title}
+          {articles[currentSlide].title}
         </h1>
-        <p className="text-xl md:text-2xl text-white max-w-2xl font-lora mb-8">
-          {typeof SLIDER_ARTICLES[currentSlide].content === "object" &&
-            "root" in SLIDER_ARTICLES[currentSlide].content &&
-            "children" in SLIDER_ARTICLES[currentSlide].content.root &&
-            Array.isArray(
-              SLIDER_ARTICLES[currentSlide].content.root.children
-            ) &&
-            (
-              SLIDER_ARTICLES[currentSlide]
-                .content as unknown as RichTextContent
-            ).root.children[0].children[0].text}
-        </p>
+        {/* <p className="text-xl md:text-2xl text-white max-w-2xl font-lora mb-8">
+          {isRichTextContent(articles[currentSlide].content) &&
+            articles[currentSlide].content.root.children[0]?.children[0]?.text}
+        </p> */}
         <Link
-          href={`/article/${SLIDER_ARTICLES[currentSlide].id}`}
+          href={`/article/${articles[currentSlide].id}`}
           className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm transition font-montserrat"
         >
           Lire l&apos;article
@@ -245,7 +90,7 @@ export const Slider = () => {
 
       {/* Navigation du slider */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">
-        {SLIDER_ARTICLES.map((_, index) => (
+        {articles.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
